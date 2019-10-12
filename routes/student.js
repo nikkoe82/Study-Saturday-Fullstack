@@ -1,3 +1,4 @@
+/* eslint-disable function-paren-newline */
 const router = require('express').Router();
 const Student = require('../db/models/students');
 const Test = require('../db/models/tests');
@@ -26,6 +27,19 @@ router.put('/:id', function(req, res, next) {
   })
     .then(test => res.status(201).json(test[1][0]))
     .catch(next);
+});
+
+router.post('/:id', async (req, res, next) => {
+  try {
+    const newStudent = await Student.findOrCreate({
+      where: {
+        id: req.params.id,
+      },
+    });
+    res.send(newStudent);
+  } catch (err) {
+    res.status(500).send('Oops!');
+  }
 });
 
 router.delete('/:id', function(req, res, next) {
